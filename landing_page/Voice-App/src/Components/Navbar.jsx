@@ -5,10 +5,11 @@ import "../App.css"
 export default function Navbar() {
     return (
         <div className="navbar">
-            <div className="nav-logo"><img src="Nav Logo.svg"/></div>
+            <div className="nav-logo"><img src="/SpeechSurf.svg"/></div>
+            <Link to="/" className="nav-title">SpeechSurf</Link>
             <ul className="nav-btn-container">
-                <li><Link to="/" className="nav-btn">Home</Link></li>
-                <li><Link to="/about" className="nav-btn">About</Link></li>
+                <li><Link to="/">HOME</Link></li>
+                <li><Link to="/about">ABOUT</Link></li>
             </ul>
         </div>
     )
