@@ -1,6 +1,9 @@
 import voice_control_v2 as vc
 import browser
 from gridify import to_alpha_numeric
+from final_transcriber import get_transcription, CHUNK, FORMAT, CHANNELS, RATE
+import time
+import pyaudio
 
 clicking = False
 typing = False
@@ -13,9 +16,24 @@ if __name__ == "__main__":
     label_set = set()
     populate_label_set(label_set)
 
+    global history
+    p = pyaudio.PyAudio()
+
+    # Open the mic stream just once:
+    stream = p.open(format=FORMAT,
+                    channels=CHANNELS,
+                    rate=RATE,
+                    input=True,
+                    frames_per_buffer=CHUNK)
+
+    print("[*] Starting the continuous microphone loop. Press Ctrl+C to exit.")
+
+    history_i = 0
+    i = 0
+
     while True:
         # Record voice and return text at set intervals
-        speech = "Please scroll down and click"
+        speech = get_transcription(stream, p, i, history_i)
         speech = speech.lower()
 
         # Scan for keywords
@@ -62,8 +80,13 @@ if __name__ == "__main__":
 
         if "exit" in speech or "quit" in speech or "terminate" in speech:
             break
-
-        input("waiting...")
-        clicking = False    # Test
+        
+        time.sleep(0.5)
+        # clicking = False    # Test
+    
+    # Properly close the stream
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
         
         

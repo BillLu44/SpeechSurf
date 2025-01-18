@@ -2,15 +2,15 @@ import pyaudio
 import wave
 import requests
 import time
+import os
 from collections import deque
 import threading
-import os
 
-# Replace with your own HF Inference endpoint (Whisper) and token:
-API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo"
-headers = {
-    "x-wait-for-model": "true"
-}
+API_URL = ""
+# headers = {
+#     "Authorization": pass, 
+#     "x-wait-for-model": "true"
+# }
 
 # Audio settings
 CHUNK = 3200
@@ -63,7 +63,7 @@ def record_microphone(stream, p, filename="temp_audio.wav"):
     Then we write those last 2 seconds to a WAV file and return its filename.
     """
     # Read a single chunk from the stream
-    data = stream.read(int(RATE* 5), exception_on_overflow=False)
+    data = stream.read(int(RATE* 2), exception_on_overflow=False)
 
     # Now 'audio_buffer' has at most 2 seconds of audio (in CHUNK-sized frames).
 
@@ -76,6 +76,29 @@ def record_microphone(stream, p, filename="temp_audio.wav"):
     wf.close()
 
     return filename
+
+def get_transcription(stream, p, i, history_i):
+    # Get the most recent 2 seconds of audio as a WAV file
+    temp_filename = f"temp_chunk{i}.wav"
+    record_microphone(stream, p, filename=temp_filename)
+
+    # Now transcribe
+    transcription = transcribe_audio(temp_filename)
+    # history += transcription
+    # print(f"[*] Transcription ({temp_filename}): {transcription}")
+    print(transcription)
+
+    # # Optionally register in your lookback buffer
+    # register_new_transcription(lookback_buffer, transcription)
+
+    i += 1
+
+    # Avoid removing the file immediately if you want to debug;
+    # otherwise, uncomment to clean up.
+    if os.path.exists(temp_filename):
+        os.remove(temp_filename)
+
+    return transcription
 
 
 def main_loop():
@@ -91,31 +114,11 @@ def main_loop():
 
     print("[*] Starting the continuous microphone loop. Press Ctrl+C to exit.")
 
+    history_i = 0
     i = 0
     try:
         while True:
-            # Get the most recent 2 seconds of audio as a WAV file
-            temp_filename = f"temp_chunk{i}.wav"
-            record_microphone(stream, p, filename=temp_filename)
-
-            # Now transcribe
-            transcription = transcribe_audio(temp_filename)
-            history += transcription
-            # print(f"[*] Transcription ({temp_filename}): {transcription}")
-            print(history)
-
-            # Optionally register in your lookback buffer
-            register_new_transcription(lookback_buffer, transcription)
-
-            i += 1
-
-            # Avoid removing the file immediately if you want to debug;
-            # otherwise, uncomment to clean up.
-            if os.path.exists(temp_filename):
-                os.remove(temp_filename)
-
-            # Sleep or continue immediately 
-            # (sleep ensures you don't spin too fast in the loop)
+            transcription = get_transcription(stream, p, i, history_i)
             time.sleep(0.5)
 
     except KeyboardInterrupt:
