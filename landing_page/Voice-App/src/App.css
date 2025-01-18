@@ -1,0 +1,14 @@
+#root {
+  padding: 2rem;
+  text-align: center;
+}
+
+.bold-text {
+  font-weight: 400;
+}
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
