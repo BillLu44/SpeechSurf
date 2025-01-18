@@ -2,7 +2,8 @@ import pyautogui as auto
 import keyboard
 import time
 
-TYPING_INTERVAL = 0.01   # How many seconds between key presses
+TYPING_INTERVAL = 0.01  # How many seconds between key presses
+SCROLL_AMOUNT = 30       # How many "clicks" of the scroll wheel
 
 # Global vars
 screenshot_num = 0
@@ -41,7 +42,15 @@ def take_screenshot():
     screenshot_num += 1
     print("Taking screenshot...")
     auto.screenshot("images/screenshot_" + str(screenshot_num) + ".png")
-    
+
+def scroll_up():
+    auto.scroll(SCROLL_AMOUNT)
+
+def scroll_down():
+    auto.scroll(-SCROLL_AMOUNT)
+
+def press_key(key):
+    auto.press(key)
 
 if __name__ == "__main__":
     time.sleep(2)
