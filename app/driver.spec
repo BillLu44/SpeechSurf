@@ -2,8 +2,8 @@
 
 
 a = Analysis(
-    ['driver.py'],
-    pathex=['/Users/blue/Library/Python/3.12/lib/python/site-packages'],
+    ['src\\driver.py'],
+    pathex=[],
     binaries=[],
     datas=[],
     hiddenimports=[],
