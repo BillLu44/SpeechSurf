@@ -57,10 +57,9 @@ if __name__ == "__main__":
                 if label in numberize(speech):
                     vc.close_grid_image()
                     vc.click_at_cell(label)
-                    grid_thread.join()
                     clicking = False
                     break
-            
+
         if "type" in speech or "typing" in speech or "write" in speech:
             typing = True
             type_text = ""
