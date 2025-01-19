@@ -32,9 +32,9 @@
   list-style: none;
 }
 
-.nav-btn-container li {
+/* .nav-btn-container li {
 
-}
+} */
 
 .landing-text {
   margin-top: 5rem;
@@ -81,6 +81,14 @@ button:focus{
 }
 
 .browsing {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 3rem;
+  margin-bottom: 4rem;
 }
+
+.browsing img{
+  width: 60rem;
+  max-width: 100%;
+  height: auto;
+}
+
+
