@@ -82,6 +82,8 @@ def get_transcription(stream, p, i, history_i):
 
     # Now transcribe
     transcription = transcribe_audio(temp_filename)
+    if transcription == "Gracias." or transcription == "Obrigado." or transcription == "Thank you." or transcription == "Merci.":
+        transcription = ""
     
     # history += transcription
     # print(f"[*] Transcription ({temp_filename}): {transcription}")

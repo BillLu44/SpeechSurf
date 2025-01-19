@@ -54,16 +54,16 @@ if __name__ == "__main__":
 
         # Scan for keywords
         if "scroll up a lot" in speech or "scroll up more" in speech:
-            browser.scroll_up(700)
+            browser.scroll_up(2000)
 
         elif "scroll up" in speech or "go up" in speech:
-            browser.scroll_up(300)
+            browser.scroll_up(600)
 
         elif "scroll down a lot" in speech or "scroll down more" in speech:
-            browser.scroll_down(700)
+            browser.scroll_down(2000)
         
         elif "scroll down" in speech or "go down" in speech:
-            browser.scroll_down(300)
+            browser.scroll_down(600)
         
         elif (not right_clicking and not left_clicking and not double_clicking):
             if "right click" in speech:
