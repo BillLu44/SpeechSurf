@@ -61,7 +61,7 @@ def record_microphone(stream, p, filename="temp_audio.wav"):
     Then we write those last 2 seconds to a WAV file and return its filename.
     """
     # Read a single chunk from the stream
-    data = stream.read(int(RATE* 5), exception_on_overflow=False)
+    data = stream.read(int(RATE* 3), exception_on_overflow=False)
 
     # Now 'audio_buffer' has at most 2 seconds of audio (in CHUNK-sized frames).
 

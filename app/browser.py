@@ -4,7 +4,7 @@ import time
 import threading
 
 TYPING_INTERVAL = 0.01  # How many seconds between key presses
-SCROLL_AMOUNT = 30       # How many "clicks" of the scroll wheel
+SCROLL_AMOUNT = 150       # How many "clicks" of the scroll wheel
 
 # Global vars
 screenshot_num = 0

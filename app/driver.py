@@ -49,7 +49,6 @@ if __name__ == "__main__":
             browser.scroll_down()
         
         elif not clicking and ("click" in speech or "tap" in speech or "press" in speech or "hit" in speech):
-            browser.take_screenshot()
             grid_thread = threading.Thread(target=vc.display_grid_image, daemon=True)
             grid_thread.start()
             clicking = True
