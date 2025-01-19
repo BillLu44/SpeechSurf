@@ -4,6 +4,8 @@ from gridify import to_alpha_numeric
 from final_transcriber import get_transcription, CHUNK, FORMAT, CHANNELS, RATE
 import time
 import pyaudio
+import threading
+from numberizer import numberize
 
 clicking = False
 typing = False
@@ -28,8 +30,9 @@ if __name__ == "__main__":
 
     print("[*] Starting the continuous microphone loop. Press Ctrl+C to exit.")
 
-    history_i = 0
+    history_i = 0   
     i = 0
+    grid_thread = threading.Thread(target=vc.display_grid_image, daemon=True)
 
     while True:
         # Record voice and return text at set intervals
@@ -44,18 +47,21 @@ if __name__ == "__main__":
             browser.scroll_down()
         
         if not clicking and ("click" in speech or "tap" in speech or "press" in speech or "hit" in speech):
-            vc.display_grid_image()
+            grid_thread = threading.Thread(target=vc.display_grid_image, daemon=True)
+            grid_thread.start()
             clicking = True
         
         if clicking:
-            # Check if we can find a grid label in this prompt
-            for word in speech.split(" "):
-                if word in label_set:
-                    vc.click_at_cell(word)
+            # Check if we can find a grid lab in this prompt
+            for label in label_set:
+                if label in numberize(speech):
                     vc.close_grid_image()
+                    vc.click_at_cell(label)
+                    grid_thread.join()
+                    clicking = False
                     break
             
-        if "type" in speech or "write" in speech:
+        if "type" in speech or "typing" in speech or "write" in speech:
             typing = True
             type_text = ""
 
@@ -81,7 +87,6 @@ if __name__ == "__main__":
         if "exit" in speech or "quit" in speech or "terminate" in speech:
             break
         
-        time.sleep(0.5)
         # clicking = False    # Test
     
     # Properly close the stream
@@ -89,4 +94,4 @@ if __name__ == "__main__":
     stream.close()
     p.terminate()
         
-        
+# 

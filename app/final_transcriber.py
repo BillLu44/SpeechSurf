@@ -5,12 +5,10 @@ import time
 import os
 from collections import deque
 import threading
+from numberizer import numberize
 
-API_URL = ""
-# headers = {
-#     "Authorization": pass, 
-#     "x-wait-for-model": "true"
-# }
+API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo"
+headers = {"Authorization": "Bearer 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", "x-wait-for-model": "true"}
 
 # Audio settings
 CHUNK = 3200
@@ -63,7 +61,7 @@ def record_microphone(stream, p, filename="temp_audio.wav"):
     Then we write those last 2 seconds to a WAV file and return its filename.
     """
     # Read a single chunk from the stream
-    data = stream.read(int(RATE* 2), exception_on_overflow=False)
+    data = stream.read(int(RATE* 5), exception_on_overflow=False)
 
     # Now 'audio_buffer' has at most 2 seconds of audio (in CHUNK-sized frames).
 
@@ -84,6 +82,7 @@ def get_transcription(stream, p, i, history_i):
 
     # Now transcribe
     transcription = transcribe_audio(temp_filename)
+    
     # history += transcription
     # print(f"[*] Transcription ({temp_filename}): {transcription}")
     print(transcription)

@@ -1,12 +1,14 @@
 import pyautogui as auto
 import keyboard
 import time
+import threading
 
 TYPING_INTERVAL = 0.01  # How many seconds between key presses
 SCROLL_AMOUNT = 30       # How many "clicks" of the scroll wheel
 
 # Global vars
 screenshot_num = 0
+text = ""
 
 # Functions
 def move_to(x, y, moveDuration):
@@ -26,16 +28,21 @@ def slow_right_click(x, y, moveDuration):
 def fast_right_click(x, y):
     auto.rightClick(x, y)
 
-def type_text(text):
+def type_text(new_text):
+    global text
+    text = new_text
+    thread = threading.Thread(target=type_text_real, daemon=True)
+    thread.start()
+    thread.join()
+
+def type_text_real():
     for char in text:
         if char.isupper():
             auto.keyDown("shift")
-            auto.typewrite(char, interval=TYPING_INTERVAL)
+            auto.write(char)
             auto.keyUp("shift")
         else:
-            auto.typewrite(char, interval=TYPING_INTERVAL)
-    
-    auto.press("enter")
+            auto.write(char)
 
 def take_screenshot():
     global screenshot_num
