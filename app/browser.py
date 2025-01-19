@@ -59,6 +59,15 @@ def scroll_down():
 def press_key(key):
     auto.press(key)
 
+def fast_forward():
+    auto.press('right')
+
+def fast_backward():
+    auto.press("left")
+
+def pause():
+    auto.press('k') 
+
 if __name__ == "__main__":
     time.sleep(2)
     fast_right_click(500, 630)

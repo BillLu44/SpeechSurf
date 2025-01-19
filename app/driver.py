@@ -32,25 +32,37 @@ if __name__ == "__main__":
 
     history_i = 0   
     i = 0
-    grid_thread = threading.Thread(target=vc.display_grid_image, daemon=True)
+    # grid_thread = threading.Thread(target=vc.display_grid_image, daemon=True)
 
     while True:
         # Record voice and return text at set intervals
         speech = get_transcription(stream, p, i, history_i)
         speech = speech.lower()
+        print(clicking, "clicking")
+
 
         # Scan for keywords
         if "scroll up" in speech or "go up" in speech:
             browser.scroll_up()
         
-        if "scroll down" in speech or "go down" in speech:
+        elif "scroll down" in speech or "go down" in speech:
             browser.scroll_down()
         
-        if not clicking and ("click" in speech or "tap" in speech or "press" in speech or "hit" in speech):
+        elif not clicking and ("click" in speech or "tap" in speech or "press" in speech or "hit" in speech):
+            browser.take_screenshot()
             grid_thread = threading.Thread(target=vc.display_grid_image, daemon=True)
             grid_thread.start()
             clicking = True
         
+        elif not clicking and ("resume" in speech or "pause" in speech or "freeze" in speech):
+            browser.pause()
+
+        elif not clicking and "backward" in speech or "previous" in speech:
+            browser.fast_backward()
+
+        elif not clicking and "forward" in speech or "next" in speech:
+            browser.fast_forward()
+
         if clicking:
             # Check if we can find a grid lab in this prompt
             for label in label_set:
