@@ -11,7 +11,9 @@ export default function Home() {
 
             <div className="landing-desc">Download now for a hands-off browsing experience, powered by speech recognition and AI.</div>
 
-            <button href="/SpeechSurf.exe" download="SpeechSurf" className="download-btn">DOWNLOAD</button>
+            <a href="/SpeechSurf.zip" download="SpeechSurf.zip">
+                <button className="download-btn">DOWNLOAD</button>
+            </a>
 
             <div className="browsing">
                 <img src="/Browsing.gif" />

@@ -1,0 +1,2 @@
+public/SpeechSurf.zip filter=lfs diff=lfs merge=lfs -text
+public/SpeechSurf/zip filter=lfs diff=lfs merge=lfs -text
