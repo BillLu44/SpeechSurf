@@ -2,6 +2,8 @@ from PIL import Image, ImageDraw, ImageFont
 import tkinter as tk
 import math
 
+num_cells = 0
+
 # Define a function to convert the cell index to alphanumeric
 def to_alpha_numeric(index):
     if index < 1000:
@@ -26,6 +28,9 @@ def add_alpha_numeric_grid_to_image(base_image_path, output_path, cell_size=100,
     # Calculate the number of grid lines needed based on the cell size
     num_x_cells = base_image.width // cell_size
     num_y_cells = base_image.height // cell_size
+
+    global num_cells
+    num_cells = num_x_cells * num_y_cells
 
     # Make a dict of type str -> (int, int) which maps a cell's alphanumeric value to the coordinates of its center
     cell_dict = {}

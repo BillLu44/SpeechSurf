@@ -66,5 +66,14 @@ def close_grid_image():
         print("WITHDRAWING tkinter")
         root.withdraw()
 
-def click_at_cell(cell_label):
-    browser.slow_left_click(cell_dict[cell_label][0], cell_dict[cell_label][1], 0.3)
+def left_click_at_cell(cell_label):
+    if (int(cell_label) <= gridify.num_cells):
+        browser.slow_left_click(cell_dict[cell_label][0], cell_dict[cell_label][1], 0.3)
+
+def right_click_at_cell(cell_label):
+    if (int(cell_label) <= gridify.num_cells):
+        browser.slow_right_click(cell_dict[cell_label][0], cell_dict[cell_label][1], 0.3)
+
+def double_click_at_cell(cell_label):
+    if (int(cell_label) <= gridify.num_cells):
+        browser.slow_double_click(cell_dict[cell_label][0], cell_dict[cell_label][1], 0.3)

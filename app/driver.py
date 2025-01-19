@@ -7,7 +7,9 @@ import pyaudio
 import threading
 from numberizer import numberize
 
-clicking = False
+left_clicking = False
+right_clicking = False
+double_clicking = False
 typing = False
 
 def populate_label_set(label_set):
@@ -39,7 +41,7 @@ if __name__ == "__main__":
         # Record voice and return text at set intervals
         speech = get_transcription(stream, p, i, history_i)
         speech = speech.lower()
-        print(clicking, "clicking")
+        print(left_clicking or right_clicking or double_clicking, "clicking")
 
         if not suspended and "suspend" in speech:
             suspended = True
@@ -51,61 +53,90 @@ if __name__ == "__main__":
             continue
 
         # Scan for keywords
-        if "scroll up" in speech or "go up" in speech:
-            browser.scroll_up()
+        if "scroll up a lot" in speech or "scroll up more" in speech:
+            browser.scroll_up(700)
+
+        elif "scroll up" in speech or "go up" in speech:
+            browser.scroll_up(300)
+
+        elif "scroll down a lot" in speech or "scroll down more" in speech:
+            browser.scroll_down(700)
         
         elif "scroll down" in speech or "go down" in speech:
-            browser.scroll_down()
+            browser.scroll_down(300)
         
-        elif not clicking and ("click" in speech or "tap" in speech or "press" in speech or "hit" in speech):
-            grid_thread = threading.Thread(target=vc.display_grid_image, daemon=True)
-            grid_thread.start()
-            clicking = True
-        
-        elif not clicking and ("resume" in speech or "pause" in speech or "freeze" in speech):
-            browser.pause()
+        elif (not right_clicking and not left_clicking and not double_clicking):
+            if "right click" in speech:
+                grid_thread = threading.Thread(target=vc.display_grid_image, daemon=True)
+                grid_thread.start()
+                right_clicking = True
 
-        elif not clicking and "backward" in speech or "previous" in speech:
-            browser.fast_backward()
+            elif "double click" in speech:
+                grid_thread = threading.Thread(target=vc.display_grid_image, daemon=True)
+                grid_thread.start()
+                double_clicking = True
+            
+            elif "click" in speech or "tap" in speech or "press" in speech or "hit" in speech:
+                grid_thread = threading.Thread(target=vc.display_grid_image, daemon=True)
+                grid_thread.start()
+                left_clicking = True
+            
+            elif "resume" in speech or "pause" in speech or "freeze" in speech:
+                browser.pause()
 
-        elif not clicking and "forward" in speech or "next" in speech:
-            browser.fast_forward()
+            elif "backward" in speech or "previous" in speech:
+                browser.fast_backward()
 
-        if clicking:
+            elif "forward" in speech or "next" in speech:
+                browser.fast_forward()
+
+        if left_clicking or right_clicking or double_clicking:
             # Check if we can find a grid lab in this prompt
             for label in label_set:
                 if str(int(label)) in numberize(speech).split(" "):
                     print("Label:", str(int(label)))
                     vc.close_grid_image()
-                    vc.click_at_cell(label)
-                    clicking = False
+
+                    if left_clicking:
+                        vc.left_click_at_cell(label)
+                        left_clicking = False
+                    elif right_clicking:
+                        vc.right_click_at_cell(label)
+                        right_clicking = False
+                    elif double_clicking:
+                        vc.double_click_at_cell(label)
+                        double_clicking = False
                     break
+
+        if "stop" in speech or "cancel" in speech or "never mind" in speech:
+            typing = False
+            left_clicking = False
+            right_clicking = False
+            double_clicking = False
+            vc.close_grid_image()
+
+        if "enter" in speech or "return" in speech:
+            browser.press_key("enter")
+            typing = False
+
+        if "exit" in speech or "terminate" in speech:
+            break
+        
+        if typing:
+            browser.type_text(speech)
 
         if "type" in speech or "write" in speech:
             typing = True
             type_text = ""
 
             if "type" in speech:
-                type_text = speech[(speech.find("type") + 4):]
+                type_text = speech[(speech.find("type") + 5):]
             else:
-                type_text = speech[(speech.find("write") + 5):]
+                type_text = speech[(speech.find("write") + 6):]
+
+            print("Type text:", type_text)
 
             browser.type_text(type_text)
-
-        if typing:
-            browser.type_text(speech)
-
-        if "stop" in speech or "cancel" in speech or "never mind" in speech:
-            typing = False
-            vc.close_grid_image()
-            clicking = False
-        
-        if "enter" in speech or "return" in speech:
-            browser.press_key("enter")
-            typing = False
-
-        if "exit" in speech or "quit" in speech or "terminate" in speech:
-            break
         
         # clicking = False    # Test
     

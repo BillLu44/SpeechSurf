@@ -4,7 +4,6 @@ import time
 import threading
 
 TYPING_INTERVAL = 0.01  # How many seconds between key presses
-SCROLL_AMOUNT = 150       # How many "clicks" of the scroll wheel
 
 # Global vars
 screenshot_num = 0
@@ -28,6 +27,15 @@ def slow_right_click(x, y, moveDuration):
 def fast_right_click(x, y):
     auto.rightClick(x, y)
 
+def slow_double_click(x, y, moveDuration):
+    auto.moveTo(x, y, duration=moveDuration)
+    auto.leftClick()
+    auto.leftClick()
+
+def fast_double_click(x, y):
+    auto.leftClick(x, y)
+    auto.leftClick(x, y)
+
 def type_text(new_text):
     global text
     text = new_text
@@ -50,11 +58,11 @@ def take_screenshot():
     print("Taking screenshot...")
     auto.screenshot("images/screenshot_" + str(screenshot_num) + ".png")
 
-def scroll_up():
-    auto.scroll(SCROLL_AMOUNT)
+def scroll_up(amount):
+    auto.scroll(amount)
 
-def scroll_down():
-    auto.scroll(-SCROLL_AMOUNT)
+def scroll_down(amount):
+    auto.scroll(-amount)
 
 def press_key(key):
     auto.press(key)
