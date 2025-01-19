@@ -18,7 +18,8 @@ if __name__ == "__main__":
     label_set = set()
     populate_label_set(label_set)
 
-    global history
+    global history, suspended
+    suspended = False
     p = pyaudio.PyAudio()
 
     # Open the mic stream just once:
@@ -40,6 +41,14 @@ if __name__ == "__main__":
         speech = speech.lower()
         print(clicking, "clicking")
 
+        if not suspended and "suspend" in speech:
+            suspended = True
+            continue
+
+        elif suspended:
+            if "prolong" in speech:
+                suspended = False
+            continue
 
         # Scan for keywords
         if "scroll up" in speech or "go up" in speech:
@@ -65,13 +74,14 @@ if __name__ == "__main__":
         if clicking:
             # Check if we can find a grid lab in this prompt
             for label in label_set:
-                if label in numberize(speech):
+                if str(int(label)) in numberize(speech).split(" "):
+                    print("Label:", str(int(label)))
                     vc.close_grid_image()
                     vc.click_at_cell(label)
                     clicking = False
                     break
 
-        if "type" in speech or "typing" in speech or "write" in speech:
+        if "type" in speech or "write" in speech:
             typing = True
             type_text = ""
 
@@ -88,7 +98,7 @@ if __name__ == "__main__":
         if "stop" in speech or "cancel" in speech or "never mind" in speech:
             typing = False
             vc.close_grid_image()
-            cilcking = False
+            clicking = False
         
         if "enter" in speech or "return" in speech:
             browser.press_key("enter")

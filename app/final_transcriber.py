@@ -8,7 +8,7 @@ import threading
 from numberizer import numberize
 
 API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo"
-headers = {"Authorization": "Bearer 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", "x-wait-for-model": "true"}
+headers = {"Authorization": "Bearer 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", "x-wait-for-model": "true"}
 
 # Audio settings
 CHUNK = 3200
