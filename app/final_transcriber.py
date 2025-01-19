@@ -2,13 +2,12 @@ import pyaudio
 import wave
 import requests
 import time
-import os
 from collections import deque
 import threading
 from numberizer import numberize
 
 API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo"
-headers = {"Authorization": "Bearer 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", "x-wait-for-model": "true"}
+headers = {"Authorization": "Bearer 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", "x-wait-for-model": "true"}
 
 # Audio settings
 CHUNK = 3200
@@ -75,29 +74,36 @@ def record_microphone(stream, p, filename="temp_audio.wav"):
 
     return filename
 
-def get_transcription(stream, p, i, history_i):
+def get_transcription(stream, p, i):
+    global history
     # Get the most recent 2 seconds of audio as a WAV file
     temp_filename = f"temp_chunk{i}.wav"
     record_microphone(stream, p, filename=temp_filename)
 
     # Now transcribe
     transcription = transcribe_audio(temp_filename)
-    if transcription == "Gracias." or transcription == "Obrigado." or transcription == "Thank you." or transcription == "Merci.":
+    if transcription.startswith(history):
+        diff = transcription[len(history):]
+    else:
+        diff = transcription
+
+    if "Gracias." in transcription or "Obrigado." in transcription or "Merci" in transcription:
         transcription = ""
     
-    # history += transcription
+    history = transcription
     # print(f"[*] Transcription ({temp_filename}): {transcription}")
-    print(transcription)
+    if diff:
+        print(diff, flush=True)
 
     # # Optionally register in your lookback buffer
-    # register_new_transcription(lookback_buffer, transcription)
+    register_new_transcription(lookback_buffer, transcription)
 
     i += 1
 
     # Avoid removing the file immediately if you want to debug;
     # otherwise, uncomment to clean up.
-    if os.path.exists(temp_filename):
-        os.remove(temp_filename)
+    # if os.path.exists(temp_filename):
+    #     os.remove(temp_filename)
 
     return transcription
 
@@ -115,11 +121,10 @@ def main_loop():
 
     print("[*] Starting the continuous microphone loop. Press Ctrl+C to exit.")
 
-    history_i = 0
     i = 0
     try:
         while True:
-            transcription = get_transcription(stream, p, i, history_i)
+            transcription = get_transcription(stream, p, i)
             time.sleep(0.5)
 
     except KeyboardInterrupt:

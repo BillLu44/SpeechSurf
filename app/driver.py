@@ -2,7 +2,6 @@ import voice_control_v2 as vc
 import browser
 from gridify import to_alpha_numeric
 from final_transcriber import get_transcription, CHUNK, FORMAT, CHANNELS, RATE
-import time
 import pyaudio
 import threading
 from numberizer import numberize
@@ -33,13 +32,12 @@ if __name__ == "__main__":
 
     print("[*] Starting the continuous microphone loop. Press Ctrl+C to exit.")
 
-    history_i = 0   
     i = 0
     # grid_thread = threading.Thread(target=vc.display_grid_image, daemon=True)
 
     while True:
         # Record voice and return text at set intervals
-        speech = get_transcription(stream, p, i, history_i)
+        speech = get_transcription(stream, p, i)
         speech = speech.lower()
         print(left_clicking or right_clicking or double_clicking, "clicking")
 
