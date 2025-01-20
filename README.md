@@ -8,5 +8,7 @@ This project is designed to cater to a diverse audience. While many of us share 
 
 Speech Surf aims to bridge the gap between technology and inclusivity, ensuring that **everyone** can enjoy a seamless digital experience.
 
+https://github.com/user-attachments/assets/dbb723f5-b585-4845-87f9-a9f32fa8b537
 
-https://www.youtube.com/watch?v=zkzkb4B0gDA
+
+
