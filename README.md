@@ -7,3 +7,6 @@ We built the landing page of this application in **ReactJS + CSS**, using **Figm
 This project is designed to cater to a diverse audience. While many of us share the privilege of being able-bodied, there is a significant group does not enjoy that same privilege. SpeechSurf addresses this disparity by reimagining how people interact with technology, taking into account the needs of handicapped individuals who face **accessibility** challenges. In other words, we empower them with a new **perspective** in exploring life.
 
 Speech Surf aims to bridge the gap between technology and inclusivity, ensuring that **everyone** can enjoy a seamless digital experience.
+
+
+https://www.youtube.com/watch?v=zkzkb4B0gDA
