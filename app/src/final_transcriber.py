@@ -15,7 +15,6 @@ FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 16000
 
-# We'll keep exactly 2 seconds of audio in our buffer.
 SECONDS_TO_KEEP = 2
 MAX_FRAMES = int(RATE / CHUNK * SECONDS_TO_KEEP)
 global history
@@ -40,7 +39,7 @@ def transcribe_audio(filename):
     if "text" in result:
         return result["text"]
     else:
-        # Fallback if structure is different
+        # fallback if structure is different
         return str(result)
 
 
@@ -59,10 +58,8 @@ def record_microphone(stream, p, filename="temp_audio.wav"):
 
     Then we write those last 2 seconds to a WAV file and return its filename.
     """
-    # Read a single chunk from the stream
+    # read single chunk
     data = stream.read(int(RATE* 3), exception_on_overflow=False)
-
-    # Now 'audio_buffer' has at most 2 seconds of audio (in CHUNK-sized frames).
 
     # Write the *entire* buffer (which is the last 2 seconds) to a WAV file
     wf = wave.open(filename, 'wb')
@@ -76,11 +73,11 @@ def record_microphone(stream, p, filename="temp_audio.wav"):
 
 def get_transcription(stream, p, i):
     global history
-    # Get the most recent 2 seconds of audio as a WAV file
+    # most recent 2 seconds of audio as a WAV file
     temp_filename = f"temp_chunk{i}.wav"
     record_microphone(stream, p, filename=temp_filename)
 
-    # Now transcribe
+    # transcribe
     transcription = transcribe_audio(temp_filename)
     if transcription.startswith(history):
         diff = transcription[len(history):]
@@ -95,13 +92,12 @@ def get_transcription(stream, p, i):
     if diff:
         print(diff, flush=True)
 
-    # # Optionally register in your lookback buffer
+    # Optionally register in your lookback buffer
     register_new_transcription(lookback_buffer, transcription)
 
     i += 1
 
-    # Avoid removing the file immediately if you want to debug;
-    # otherwise, uncomment to clean up.
+    # remove files
     # if os.path.exists(temp_filename):
     #     os.remove(temp_filename)
 
@@ -136,13 +132,13 @@ def main_loop():
         p.terminate()
 
 if __name__ == "__main__":
-    # Create and start the main loop in a thread
+    # main loop
     main_thread = threading.Thread(target=main_loop, daemon=True)
     main_thread.start()
 
     print("[*] Main loop running in a thread. Press Ctrl+C to exit.")
     try:
-        # Keep the main program running while the thread does its work
+        
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
