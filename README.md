@@ -8,7 +8,7 @@ This project is designed to cater to a diverse audience. While many of us share 
 
 Speech Surf aims to bridge the gap between technology and inclusivity, ensuring that **everyone** can enjoy a seamless digital experience.
 
-Check out the website at www.speechsurf.co!
+Check out the website at www.speechsurf.co! (Note that the program only runs on Windows currently)
 
 https://github.com/user-attachments/assets/dbb723f5-b585-4845-87f9-a9f32fa8b537
 
