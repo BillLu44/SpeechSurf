@@ -5,9 +5,14 @@ import time
 from collections import deque
 import threading
 from numberizer import numberize
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo"
-headers = {"Content-Type": "audio/flac", "Authorization": "Bearer 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", "x-wait-for-model": "true"}
+API_KEY = os.getenv("SpeechSurf")
+headers = {"Content-Type": "audio/flac", "Authorization": f"Bearer {API_KEY}", "x-wait-for-model": "true"}
 
 # Audio settings
 CHUNK = 3200
