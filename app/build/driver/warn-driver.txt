@@ -35,6 +35,8 @@ missing module named multiprocessing.get_start_method - imported by multiprocess
 missing module named pyimod02_importers - imported by C:\Users\Gsprg\AppData\Roaming\Python\Python313\site-packages\PyInstaller\hooks\rthooks\pyi_rth_pkgutil.py (delayed)
 missing module named collections.Callable - imported by collections (optional), socks (optional)
 missing module named collections.Sequence - imported by collections (conditional), pyautogui (conditional)
+missing module named 'IPython.core' - imported by dotenv.ipython (top-level)
+missing module named IPython - imported by dotenv.ipython (top-level)
 missing module named simplejson - imported by requests.compat (conditional, optional)
 missing module named dummy_threading - imported by requests.cookies (optional)
 missing module named asyncio.DefaultEventLoopPolicy - imported by asyncio (delayed, conditional), asyncio.events (delayed, conditional)
