@@ -10,9 +10,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo"
-API_KEY = os.getenv("SpeechSurf")
-headers = {"Content-Type": "audio/flac", "Authorization": f"Bearer {API_KEY}", "x-wait-for-model": "true"}
+# API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3-turbo"
+# API_KEY = os.getenv("SpeechSurf")
+# headers = {"Content-Type": "audio/flac", "Authorization": f"Bearer {API_KEY}", "x-wait-for-model": "true"}
 
 # Audio settings
 CHUNK = 3200
@@ -33,7 +33,7 @@ def transcribe_audio(filename):
     with open(filename, "rb") as f:
         data = f.read()
 
-    response = requests.post(API_URL, headers=headers, data=data)
+    response = requests.post("https://speechsurf.co/api/query", data=data)
 
     try:
         result = response.json()
